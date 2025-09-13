@@ -1,0 +1,39 @@
+@use 'sass:map';
+
+@mixin colorClassGen($property, $prefix, $suffix, $color-map) {
+    @each $name, $value in $color-map {
+        .#{$prefix}-#{$name}-#{$suffix} {
+            #{$property}: $value !important;
+        }
+    }
+}
+
+@mixin colorClassBulkGen ($suffix, $map) {
+    @include colorClassGen("background-color", "bg", $suffix, $map);
+    @include colorClassGen("color", "text", $suffix, $map);
+    @include colorClassGen("fill", "svg", $suffix, $map);
+}
+
+@mixin horizontalPadding ($lowest, $ideal, $most) {
+    padding-left: clamp($lowest, $ideal, $most);
+    padding-right: clamp($lowest, $ideal, $most);
+}
+
+@mixin verticalPadding ($lowest, $ideal, $most) {
+    padding-top: clamp($lowest, $ideal, $most);
+    padding-bottom: clamp($lowest, $ideal, $most);
+}
+
+@mixin fullPadding ($padding) {
+    padding-top: min(100%, $padding);
+    padding-left: min(100%, $padding);
+    padding-bottom: min(100%, $padding);
+    padding-right: min(100%, $padding);
+};
+
+@mixin fullPaddingV2 ($padding) {
+    padding-top: min(100%, $padding);
+    padding-left: min(100%, calc($padding * 2));
+    padding-bottom: min(100%, $padding);
+    padding-right: min(100%, calc($padding * 2));
+};

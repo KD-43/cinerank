@@ -1,0 +1,141 @@
+
+@use '../../node_modules/bootstrap/scss/bootstrap' as *;
+@use './customMixins' as *;
+@use "sass:map";
+
+$theme-color-shades-100: (
+    "gray": $gray-100,
+    "blue": $blue-100,
+);
+
+$theme-color-shades-200: (
+    "blue": $blue-200,
+    "cyan": $cyan-200,
+    "gray": $gray-200,
+    "green": $green-200,
+    "indigo": $indigo-200,
+    "orange": $orange-200,
+    "pink": $pink-200,
+    "purple": $purple-200,
+    "red": $red-200,
+    "teal": $teal-200,
+    "yellow": $yellow-200,
+);
+
+$theme-color-shades-300: (
+    "blue": $blue-300,
+    "cyan": $cyan-300,
+    "gray": $gray-300,
+    "green": $green-300,
+    "indigo": $indigo-300,
+    "orange": $orange-300,
+    "pink": $pink-300,
+    "purple": $purple-300,
+    "red": $red-300,
+    "teal": $teal-300,
+    "yellow": $yellow-300,
+);
+
+$theme-color-shades-400: (
+    "blue": $blue-400,
+    "cyan": $cyan-400,
+    "gray": $gray-400,
+    "green": $green-400,
+    "indigo": $indigo-400,
+    "orange": $orange-400,
+    "pink": $pink-400,
+    "purple": $purple-400,
+    "red": $red-400,
+    "teal": $teal-400,
+    "yellow": $yellow-400,
+);
+
+$theme-color-shades-500: (
+    "blue": $blue-500,
+    "cyan": $cyan-500,
+    "gray": $gray-500,
+    "green": $green-500,
+    "indigo": $indigo-500,
+    "orange": $orange-500,
+    "pink": $pink-500,
+    "purple": $purple-500,
+    "red": $red-500,
+    "teal": $teal-500,
+    "yellow": $yellow-500,
+);
+
+$theme-color-shades-600: (
+    "blue": $blue-600,
+    "cyan": $cyan-600,
+    "gray": $gray-600,
+    "green": $green-600,
+    "indigo": $indigo-600,
+    "orange": $orange-600,
+    "pink": $pink-600,
+    "purple": $purple-600,
+    "red": $red-600,
+    "teal": $teal-600,
+    "yellow": $yellow-600,
+);
+
+// @include colorClassGen("fill", "svg", "100", $theme-color-shades-100);
+// @include colorClassGen("background-color", "bg", "100", $theme-color-shades-100);
+// @include colorClassGen("background-color", "bg", "300", $theme-color-shades-300);
+// @include colorClassGen("fill", "svg", "300", $theme-color-shades-300);
+// @include colorClassGen("color", "text", "300", $theme-color-shades-300);
+// @include colorClassGen("fill", "svg", "600", $theme-color-shades-600);
+// @include colorClassGen("background-color", "bg", "600", $theme-color-shades-600);
+// @include colorClassGen("color", "text", "600", $theme-color-shades-600);
+
+@include colorClassBulkGen("100", $theme-color-shades-100);
+@include colorClassBulkGen("200", $theme-color-shades-200);
+@include colorClassBulkGen("300", $theme-color-shades-300);
+@include colorClassBulkGen("400", $theme-color-shades-400);
+@include colorClassBulkGen("500", $theme-color-shades-500);
+@include colorClassBulkGen("600", $theme-color-shades-600);
+
+//Black
+.bg-black {
+    background-color: $black;
+}
+.svg-black {
+    fill: $black;
+}
+.text-black {
+    color: $black;
+}
+
+//Gray
+.bg-gray-600 {
+    background-color: $gray-600;
+}
+.bg-gray-700 {
+    background-color: $gray-700;
+}
+.bg-gray-800 {
+    background-color: $gray-800;
+}
+.bg-gray-900 {
+    background-color: $gray-900;
+}
+.svg-gray-600 {
+    fill: $gray-600;
+}
+.svg-gray-700 {
+    fill: $gray-700;
+}
+.svg-gray-900 {
+    fill: $gray-900;
+}
+.text-gray-100 {
+    color: $gray-100;
+}
+.text-gray-700 {
+    color: $gray-700;
+}
+.text-gray-800 {
+    color: $gray-800;
+}
+.text-gray-900 {
+    color: $gray-900;
+}

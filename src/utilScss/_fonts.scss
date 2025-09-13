@@ -1,0 +1,56 @@
+@use 'sass:map';
+
+$font-path: "../assets/fonts/karasumaGothic";
+$font-folder: "/karasumaGothic";
+
+// $font-files: (
+//     "Black": (file: "KarasumaGothic-Black.otf", weight: 900, style: normal),
+//     "BlackItalic": (file: "Karasuma-BlackItalic.otf", weight: 900, style: italic),
+//     "Bold": ("KarasumaGothic-Bold.otf"),
+//     "BoldItalic": ("KarasumaGothic-BoldItalic.otf"),
+//     "Italic": ("KarasumaGothic-Italic.otf"),
+//     "Light": ("KarasumaGothic-Light.otf"),
+//     "LightItalic": ("KarasumaGothic-LightItalic.otf"),
+//     "Medium": ("KarasumaGothic-Medium.otf"),
+//     "MediumItalic": ("KarasumaGothic-MediumItalic.otf"),
+//     "Regular": ("KarasumaGothic-Regular.otf"),
+//     "Thin": ("KarasumaGothic-Thin.otf"),
+//     "ThinItalic": ("KarasumaGothic-ThinItalic.otf"),
+// );
+
+// @mixin fontFaceGen ($path, $folder, $files) {
+//     @each $name, $value in $files {
+//         @font-face {
+//             src: url('#{$font-path}#{$font-folder}/#{$value}');
+//             font-family: 'Karasuma-#{$name}';
+//         };
+//     };
+// };
+
+// @mixin fontClassGen ($files) {
+//     @each $name, $value in $files {
+//         .type-karasuma-#{$name} {
+//             font-family: 'Karasuma-#{$name}';
+//             font-weight: inherit;
+//         };
+//     };
+// };
+
+@font-face {
+    src: url('../assets/fonts/karasumaGothic/KarasumaGothic-Black.otf') format("opentype");
+    font-family: "Karasuma-Black";
+};
+
+.type-karasuma-Black {
+    font-family: "Karasuma-Black";
+};
+
+// @font-face {
+//     src: url('#{$font-path}/behance-651bce7d8253d.ttf');
+//     font-family: "Aexpective";
+// }
+
+// .type-aex {
+//     font-family: "Aexpective";
+//     font-size: 1em;
+// }

@@ -6,7 +6,6 @@ import { ItemTypes } from './ItemTypes';
 import { useDrop } from 'react-dnd';
 import { DragCard } from './DraggableCard';
 import { ColorPicker } from './TierColorPicker';
-import { DropIndicator } from './DropIndicator';
 
 function findHoverIndex(monitor, ref, items) {
     if (!monitor) {

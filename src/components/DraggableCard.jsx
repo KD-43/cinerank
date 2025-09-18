@@ -64,54 +64,54 @@ export function DragCard ({ id, text, image, index, container, moveCard, deleteI
         collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
     })
     
-    const [, drop] = useDrop({
-        accept: ItemTypes.CARD,
-        canDrop: (draggedItem) => draggedItem.container === container,
-        hover(item, monitor) {
-            if (!ref.current || item.id === id || item.container !== container) {
-                console.log(`/useDrop/[hover function] --- | ERROR | Following parameters determined 'false' or 'not permitted': 'ref.current is false'(${ref.current}), 'item.id(${item.id}) equals to the current id(${id})', 'item.container(${item.container}) is not in the same container(${container})' // returning...`);
-                return;
-            };
-            console.log(`/useDrop/[hover function] --- |[ 1 ]| Proceeding to find 'dragIndex' and 'hoverIndex'...`);
-            const dragIndex = item.index;
-            const hoverIndex = index;
+    // const [, drop] = useDrop({
+    //     accept: ItemTypes.CARD,
+    //     canDrop: (draggedItem) => draggedItem.container === container,
+    //     hover(item, monitor) {
+    //         if (!ref.current || item.id === id || item.container !== container) {
+    //             console.log(`/useDrop/[hover function] --- | ERROR | Following parameters determined 'false' or 'not permitted': 'ref.current is false'(${ref.current}), 'item.id(${item.id}) equals to the current id(${id})', 'item.container(${item.container}) is not in the same container(${container})' // returning...`);
+    //             return;
+    //         };
+    //         console.log(`/useDrop/[hover function] --- |[ 1 ]| Proceeding to find 'dragIndex' and 'hoverIndex'...`);
+    //         const dragIndex = item.index;
+    //         const hoverIndex = index;
             
-            if (dragIndex === hoverIndex) {
-                console.log(`/useDrop/[hover function] --- | ERROR | dragIndex(${dragIndex}) and hoverIndex(${hoverIndex}) are the same, // returning ...`);
-                return;
-            };
+    //         if (dragIndex === hoverIndex) {
+    //             console.log(`/useDrop/[hover function] --- | ERROR | dragIndex(${dragIndex}) and hoverIndex(${hoverIndex}) are the same, // returning ...`);
+    //             return;
+    //         };
 
-            console.log(`/useDrop/[hover function] --- |[ 1 ]|>>|( RESULT )| Found 'dragIndex'(${dragIndex}) and 'hoverIndex'(${hoverIndex})`);
+    //         console.log(`/useDrop/[hover function] --- |[ 1 ]|>>|( RESULT )| Found 'dragIndex'(${dragIndex}) and 'hoverIndex'(${hoverIndex})`);
 
-            console.log(`/useDrop/[hover function] --- |[ 2 ]| Checking Bounding box to prevent jumpy swaps...`);
+    //         console.log(`/useDrop/[hover function] --- |[ 2 ]| Checking Bounding box to prevent jumpy swaps...`);
 
-            const hoverBoundingRect = ref.current.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-            const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+    //         const hoverBoundingRect = ref.current.getBoundingClientRect();
+    //         const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    //         const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+    //         const clientOffset = monitor.getClientOffset();
+    //         const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+    //         const hoverClientX = clientOffset.x - hoverBoundingRect.left;
 
-            if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
-                console.log(`/useDrop/[hover function] --- | ERROR | 'dragIndex(${dragIndex})' is less than 'hoverIndex(${hoverIndex})', AND 'hoverClientX(${hoverClientX})' is less than 'hoverMiddleX(${hoverMiddleX}) // returning...`);
-                return;
-            };
+    //         if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
+    //             console.log(`/useDrop/[hover function] --- | ERROR | 'dragIndex(${dragIndex})' is less than 'hoverIndex(${hoverIndex})', AND 'hoverClientX(${hoverClientX})' is less than 'hoverMiddleX(${hoverMiddleX}) // returning...`);
+    //             return;
+    //         };
 
-            if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
-                console.log(`/useDrop/[hover function] --- | ERROR | 'dragIndex(${dragIndex})' is greater than 'hoverIndex(${hoverIndex})', AND 'hoverClientX(${hoverClientX})' is greater than 'hoverMiddleX(${hoverMiddleX}) // returning...`);
-                return;
-            };
+    //         if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
+    //             console.log(`/useDrop/[hover function] --- | ERROR | 'dragIndex(${dragIndex})' is greater than 'hoverIndex(${hoverIndex})', AND 'hoverClientX(${hoverClientX})' is greater than 'hoverMiddleX(${hoverMiddleX}) // returning...`);
+    //             return;
+    //         };
 
-            console.log(`/useDrop/[hover function] --- |[ 2 ]|>>|( RESULT )| 'dragIndex(${dragIndex})' & 'hoverIndex(${hoverIndex})', 'hoverClientX(${hoverClientX})' & 'hoverMiddleX(${hoverMiddleX}) determined to be acceptable params for clean swapping // Proceeding...`);
+    //         console.log(`/useDrop/[hover function] --- |[ 2 ]|>>|( RESULT )| 'dragIndex(${dragIndex})' & 'hoverIndex(${hoverIndex})', 'hoverClientX(${hoverClientX})' & 'hoverMiddleX(${hoverMiddleX}) determined to be acceptable params for clean swapping // Proceeding...`);
 
-            console.log(`/useDrop/[hover function] --- |[ 3 ]| Invoking 'moveCard(dragIndex: ${dragIndex}, hoverIndex: ${hoverIndex}, container: ${container})' callback function // Processing...`);
+    //         console.log(`/useDrop/[hover function] --- |[ 3 ]| Invoking 'moveCard(dragIndex: ${dragIndex}, hoverIndex: ${hoverIndex}, container: ${container})' callback function // Processing...`);
 
-            moveCard(dragIndex, hoverIndex, container);
-            item.index = hoverIndex;
+    //         moveCard(dragIndex, hoverIndex, container);
+    //         item.index = hoverIndex;
 
-            console.log(`/useDrop/[hover function] --- |[ 3 ]|>>|( RESULT )| moveCard() callback function finished, item.index(${item.index}) is now the hoverIndex(${hoverIndex}), // Exiting...`);
-        },
-    });
+    //         console.log(`/useDrop/[hover function] --- |[ 3 ]|>>|( RESULT )| moveCard() callback function finished, item.index(${item.index}) is now the hoverIndex(${hoverIndex}), // Exiting...`);
+    //     },
+    // });
 
     const opacity = isDragging ? 0.5 : 1;
     const bgColor = image === null || image === undefined ? "itemCardBgColor" : null;
@@ -120,7 +120,7 @@ export function DragCard ({ id, text, image, index, container, moveCard, deleteI
         setIsDeleteMenuVisible(!isDeleteMenuVisible);
     };
     
-    drag(drop(ref));
+    drag(ref);
 
     return (
         <div

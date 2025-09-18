@@ -1012,8 +1012,8 @@ export function useTierList (initialData) {
             } else {
                 console.log(`|( useTierList )|> MOVE ITEM <|[SET STATE]: containerId is NOT 'unranked', moving forward with swap.`);
                 const rowIndex = row.findIndex(r => r.id === containerId);
-                if (!rowIndex || rowIndex === -1) {
-                    console.log(`|( useTierList )|> MOVE ITEM <|[SET STATE]: ABORT - rowIndex invalid, returned false or -1`);
+                if (rowIndex === -1) {
+                    console.log(`|( useTierList )|> MOVE ITEM <|[SET STATE]: ABORT - rowIndex invalid, returned -1`);
                     return;
                 };
 

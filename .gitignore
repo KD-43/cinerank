@@ -28,5 +28,5 @@ dist-ssr
 .dev.vars
 .vscode/http-client.env.json
 
-# Local dev
+#localDev
 .wrangler/

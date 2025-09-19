@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect, Fragment } from 'react';
 import { DashCircle, DashCircleFill, DashSquare, DashSquareFill, DropletHalf } from 'react-bootstrap-icons';
 import DropZone from './TierDropzone';
 import Button from 'react-bootstrap/esm/Button';
@@ -54,6 +54,38 @@ function findHoverIndex(monitor, ref, items) {
 
     return hoverIndex;
 
+}
+
+function findClosestIndex(monitor, ref, cards) {
+    if (!ref.current) return cards.length;
+
+    const clientOffset = monitor.getClientOffset();
+    let closest = { distance: Infinity, index: cards.length };
+
+    if (cards.length === 0) {
+        return 0;
+    }
+
+    for (let i = 0; i < cards.length; i++) {
+        const cardNode = ref.current.querySelector(`[data-id="${cards[i].id}"]`);
+        if (cardNode) {
+            const cardRect = cardNode.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+
+            const distance = Math.sqrt(
+                Math.pow(clientOffset.x - cardCenterX, 2) + Math.pow(clientOffset.y - cardCenterY, 2)
+            );
+
+            if (distance < closest.distance) {
+                closest.distance = distance;
+                const xRelativeToCard = clientOffset.x - cardRect.left;
+                closest.index = (xRelativeToCard < cardRect.width / 2) ? i : i + 1;
+            }
+        }
+    }
+
+    return closest.index;
 }
 
 function PhantomCard () {
@@ -222,17 +254,14 @@ export function TierRow ({ rowId, label, color, items, onUpdateRow, dropItem, mo
                 return;
             };
 
+            const hoverIndex = findClosestIndex(monitor, ref, currentItems);
+
             if (draggedItem.container === currentRowId) {
                 setPhantomIndex(null);
                 console.log(`[Hover Function] --- draggedItem.container: ${draggedItem.container} === currentRowId: ${currentRowId}`);
                 const dragIndex = draggedItem.index;
 
                 console.log("dragIndex: ", dragIndex);
-                console.log("ref: ", ref);
-                console.log("items: ", items);
-                console.log(`Proceeding with 'findHoverIndex(monitor: ${monitor}, ref: ${ref}, currentItems: ${currentItems})`);
-
-                const hoverIndex = findHoverIndex(monitor, ref, currentItems);
 
                 if (hoverIndex === -1 || dragIndex === hoverIndex) {
                     console.log("hoverIndex returned -1, or dragIndex is the same as hoverIndex, returning...");
@@ -241,14 +270,15 @@ export function TierRow ({ rowId, label, color, items, onUpdateRow, dropItem, mo
 
                 console.log("Created hoverIndex: ", hoverIndex);
 
-                if (dragIndex === hoverIndex) {
-                    console.log(`dragIndex: ${dragIndex} === hoverIndex: ${hoverIndex}, returning...`);
-                    return;
-                };
+                const adjustedHoverIndex = (dragIndex < hoverIndex) ? hoverIndex - 1 : hoverIndex;
+
+                if (dragIndex === adjustedHoverIndex) return;
 
                 console.log(`Moving forward with moveItem(dragIndex: ${dragIndex}, hoverIndex: ${hoverIndex}), currentRowId: ${currentRowId},`);
-                currentMoveItem(dragIndex, hoverIndex, currentRowId);
-                draggedItem.index = hoverIndex;
+
+                currentMoveItem(dragIndex, adjustedHoverIndex, currentRowId);
+
+                draggedItem.index = adjustedHoverIndex;
                 return;
             } else {
                 console.log(`draggedItem.container: ${draggedItem.container} !== currentRowId: ${currentRowId}`);
@@ -405,8 +435,8 @@ export function TierRow ({ rowId, label, color, items, onUpdateRow, dropItem, mo
                         <input id={rowId} className="w-75" type="text" value={localLabel} onChange={handleLabelChange} onBlur={handleLabelBlur} />
                     </div> */}
                 </div>
-                <div className="col-10 align-content-start d-flex flex-wrap">
-                    <div ref={ref} className="d-inline-flex w-100 h-100">{renderedCards}</div>
+                <div ref={ref} className="col-10 align-content-start d-flex flex-wrap">
+                    {renderedCards}
                 </div>
                 <div className="col-1 options d-flex align-items-center justify-content-center bg-black">
                     <div onClick={handleDelete} className='flex-item deleteRow_style'>

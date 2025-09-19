@@ -1,19 +1,31 @@
-# React + Vite
+# Project Summary
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This is a fully interactive, single-page application that allows users to create, customize, and manage personal tier lists. The application is built on a modern, professional-grade stack, featuring a sophisticated React front-end and a serverless API backend running on Cloudflare Pages. The user interface includes a complex, multi-container, sortable drag-and-drop system powered by 'react-dnd'. It allows for precise, index-based insertion and reordering of items, even within a responsive, wrapping layout. The front-end communicates with a RESTful API that handles all data operations. For this portfolio version, the API is an "API-Aware Mock": the Cloudflare Function backend uses a stateless, in-memory database to perfectly simulate a full CRUD lifecycle. This architecture demonstrates a mastery of the full client-server data flow and secure API design, while providing a seamless demo experience without requiring a real database or user login.
 
 # Developer Notes
 
 Notes created by developer to keep track of any quirks or behaviors that are intended or otherwise.
+
+## Intended Design
+
+- Advanced State Management with Immer:
+    - Architected a custom, all-in-one state management hook (useTierList) to encapsulate all complex logic.
+    - Instead of a traditional useReducer, this hook leverages useImmer to provide a reducer-like API. Action functions dispatch "recipes" that describe state mutations in a simple, direct style, while Immer guarantees the immutability of the complex, nested state tree.
+    - This pattern provides the predictability of a reducer with superior ergonomics and eliminates an entire class of mutation bugs.
+    - The state manager includes a full undo/redo history stack, built from scratch to handle the application's specific state transitions.
+- Complex UI & Drag-and-Drop (react-dnd):
+    - Implemented a multi-container, sortable drag-and-drop interface.
+    - Engineered a "Smart Container / Dumb Item" architecture, where container components (TierRow, UnrankedItems) are responsible for handling all drop events, including precise, index-based insertion.
+    - Solved complex DND bugs, including race conditions and stale closures, by implementing the "ref pattern" to ensure event handlers always have access to the latest props.
+- Serverless REST API (API-Aware Mock):
+    - Designed and built a RESTful API backend using Cloudflare Functions to handle all CRUD (Create, Read, Update, Delete) operations.
+    - The API acts as both an origin server for the application's data and a secure proxy gateway for fetching data from the external TMDB API.
+    - Implemented RESTful conventions for endpoints, HTTP verbs, and status codes.
+- Modern React Architecture & Tooling:
+    - Utilized a "Smart Parent / Dumb Child" component pattern, with a top-level page component (TierListPage) orchestrating data and logic.
+    - Configured a full CI/CD pipeline from GitHub to Cloudflare Pages for automatic deployments, including management of server-side secrets and SPA routing (_redirects).
+    - Optimized the production build using Vite and Terser to remove console logs and minify code.
+
 
 ## False Errors
 

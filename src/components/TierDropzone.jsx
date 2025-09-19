@@ -11,6 +11,38 @@ function PhantomCard () {
     )
 }
 
+function findClosestIndex(monitor, ref, cards) {
+    if (!ref.current) return cards.length;
+
+    const clientOffset = monitor.getClientOffset();
+    let closest = { distance: Infinity, index: cards.length };
+
+    if (cards.length === 0) {
+        return 0;
+    }
+
+    for (let i = 0; i < cards.length; i++) {
+        const cardNode = ref.current.querySelector(`[data-id="${cards[i].id}"]`);
+        if (cardNode) {
+            const cardRect = cardNode.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+
+            const distance = Math.sqrt(
+                Math.pow(clientOffset.x - cardCenterX, 2) + Math.pow(clientOffset.y - cardCenterY, 2)
+            );
+
+            if (distance < closest.distance) {
+                closest.distance = distance;
+                const xRelativeToCard = clientOffset.x - cardRect.left;
+                closest.index = (xRelativeToCard < cardRect.width / 2) ? i : i + 1;
+            }
+        }
+    }
+
+    return closest.index;
+}
+
 export default function DropZone ({ cards, container, moveCard, onDropCard, deleteItem, ...other }) {
 
     // Ref to dropZone's main div for calculations
@@ -69,44 +101,43 @@ export default function DropZone ({ cards, container, moveCard, onDropCard, dele
         },
 
         hover(draggedItem, monitor) {
-            console.log(`/useDrop/[hover function] --- |[ 0 ]| Function initiated, reading the propsRef for up-to-date and functions...`);
-            const { cards: currentCards, container: currentContainer, moveCard: currentMoveCard, onDropCard: currentDropCard, } = propsRef.current;
+            const { cards: currentItems, moveCard: currentMoveItem, container: currentContainer } = propsRef.current;
+
+            // console.log("/useDrop/[Hover Function] --- Reading 'propsRef.current' -> 'items': ", currentItems, " 'moveItem': ", currentMoveItem, " 'rowId': ", currentRowId);
 
             if (!ref.current) {
-                console.log("/useDrop/[hover function] --- | ERROR | ref.current not available, returning....");
+                console.log("ref.current not available, returning....");
                 return;
             };
 
-            console.log(`/useDrop/[hover function] --- |[ 0 ]|>>| RESULT | Found currentCards: `, currentCards, `, currentContainer: `, currentContainer, `, currentDropCard: `, currentDropCard);
+            const hoverIndex = findClosestIndex(monitor, ref, currentItems);
 
-            // Only care about items from other containers
-            // Reordering within same container handled by DragCard's hover
-            if (draggedItem.container !== 'unranked' && monitor.isOver({ shallow: true })) {
-                // FInd mouse position relative to drop zone
-                const clientOffset = monitor.getClientOffset();
+            if (draggedItem.container === currentContainer) {
+                setPhantomIndex(null);
+                console.log(`[Hover Function] --- draggedItem.container: ${draggedItem.container} === currentContainer: ${currentContainer}`);
+                const dragIndex = draggedItem.index;
 
-                // FInd the index where the new card should be inserted
-                let newPhantomIndex = currentCards.length;
+                console.log("dragIndex: ", dragIndex);
 
-                //Iterate over existing cards to find the insertion point
-                for (let i = 0; i < currentCards.length; i++) {
-                    const cardNode = ref.current.querySelector(`[data-id="${currentCards[i].id}"]`);
-
-                    if (cardNode) {
-                        const cardRect = cardNode.getBoundingClientRect();
-                        const cardMiddleX = (cardRect.right - cardRect.left) / 2;
-                        const xRelativeToCard = clientOffset.x - cardRect.left;
-
-                        if (xRelativeToCard < cardMiddleX) {
-                            newPhantomIndex = i;
-                            break;
-                        }
-                    }
+                if (hoverIndex === -1 || dragIndex === hoverIndex) {
+                    console.log("hoverIndex returned -1, or dragIndex is the same as hoverIndex, returning...");
+                    return;
                 }
 
-                setPhantomIndex(newPhantomIndex);
+                console.log("Created hoverIndex: ", hoverIndex);
+
+                const adjustedHoverIndex = (dragIndex < hoverIndex) ? hoverIndex - 1 : hoverIndex;
+
+                if (dragIndex === adjustedHoverIndex) return;
+
+                // console.log(`Moving forward with moveItem(dragIndex: ${dragIndex}, hoverIndex: ${hoverIndex}), currentContainer: ${currentContainer},`);
+
+                currentMoveItem(dragIndex, adjustedHoverIndex, currentContainer);
+
+                draggedItem.index = adjustedHoverIndex;
+                return;
             } else {
-                setPhantomIndex(null);
+                console.log(`draggedItem.container: ${draggedItem.container} !== currentContainer: ${currentContainer}`);
             }
 
         },
